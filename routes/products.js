@@ -883,50 +883,88 @@ router.delete("/:id", async (req, res) => {
 });
 
 router.put("/:id", async (req, res) => {
-  const product = await Product.findByIdAndUpdate(
-    req.params.id,
-    {
-      name: req.body.name,
-      subCat: req.body.subCat,
-      description: req.body.description,
-      images: req.body.images,
-      brand: req.body.brand,
-      price: req.body.price,
-      oldPrice: req.body.oldPrice,
-      catId: req.body.catId,
-      subCat: req.body.subCat,
-      subCatId: req.body.subCatId,
-      subCatName: req.body.subCatName,
-      catName: req.body.catName,
-      category: req.body.category,
-      countInStock: req.body.countInStock,
-      rating: req.body.rating,
-      numReviews: req.body.numReviews,
-      isFeatured: req.body.isFeatured,
-      productRam: req.body.productRam,
-      size: req.body.size,
-      productWeight: req.body.productWeight,
-      // location: req.body.location,
-    },
-    { new: true }
-  );
+  try {
+      // Validate category
+      const category = await Category.findById(req.body.category);
+      if (!category) {
+          return res.status(400).json({
+              success: false,
+              message: "Invalid Category!"
+          });
+      }
 
-  if (!product) {
-    res.status(404).json({
-      message: "the product can not be updated!",
-      status: false,
-    });
+      // Validate required fields
+      if (!req.body.name || !req.body.description) {
+          return res.status(400).json({
+              success: false,
+              message: "Name and description are required!"
+          });
+      }
+
+      // Handle images
+      const images_Array = req.body.images || [];
+
+      // Validate prices array
+      const prices = req.body.prices?.map(price => ({
+          quantity: Number(price.quantity) || 0,
+          actualPrice: Number(price.actualPrice) || 0,
+          oldPrice: Number(price.oldPrice) || 0,
+          discount: Number(price.discount) || 0,
+          type: price.type || ''
+      })) || [];
+
+      // Find product by ID and update
+      let product = await Product.findByIdAndUpdate(
+        req.params.id,
+        {
+          name: req.body.name,
+          description: req.body.description,
+          images: images_Array,
+          prices: prices,
+          // brand: req.body.brand || '',
+          // price: Number(req.body.price) || 0,
+          // oldPrice: Number(req.body.oldPrice) || 0,
+          catId: req.body.catId || '',
+          catName: req.body.catName || '',
+          subCat: req.body.subCat || '',
+          subCatId: req.body.subCatId || '',
+          subCatName: req.body.subCatName || '',
+          category: req.body.category,
+          countInStock: Number(req.body.countInStock) || 0,
+          rating: Number(req.body.rating) || 0,
+          isFeatured: Boolean(req.body.isFeatured),
+          // discount: Number(req.body.discount) || 0,
+          // productRam: Array.isArray(req.body.productRam) ? req.body.productRam : [],
+          // size: Array.isArray(req.body.size) ? req.body.size : [],
+          // productWeight: Array.isArray(req.body.productWeight) ? req.body.productWeight : []
+        },
+        { new: true }
+      );
+
+      if (!product) {
+          return res.status(404).json({
+              success: false,
+              message: "The product cannot be updated!"
+          });
+      }
+
+      // Return success response
+      return res.status(200).json({
+          success: true,
+          data: product,
+          message: "Product updated successfully!"
+      });
+
+  } catch (error) {
+      console.error("Error updating product:", error);
+      return res.status(500).json({
+          success: false,
+          message: "Internal server error",
+          error: error.message
+      });
   }
-
-  imagesArr = [];
-
-  res.status(200).json({
-    message: "the product is updated!",
-    status: true,
-  });
-
-  //res.send(product);
 });
+
 
 // router.get(`/`, async (req, res) => {
 //   const page = parseInt(req.query.page) || 1;

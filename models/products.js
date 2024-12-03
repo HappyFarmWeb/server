@@ -39,18 +39,18 @@ const productSchema = mongoose.Schema({
         }
     ],
     prices: [priceSchema],
-    brand: {
-        type: String,
-        default: ''
-    },
-    price: {
-        type: Number,
-        default: 0
-    },
-    oldPrice: {
-        type: Number,
-        default: 0
-    },
+    // brand: {
+    //     type: String,
+    //     default: ''
+    // },
+    // price: {
+    //     type: Number,
+    //     default: 0
+    // },
+    // oldPrice: {
+    //     type: Number,
+    //     default: 0
+    // },
     catName:{
         type: String,
         default: ''
@@ -92,24 +92,24 @@ const productSchema = mongoose.Schema({
         type: Number,
         default: 0,
     },
-    productRam: [
-        {
-            type: String,
-            default: null,
-        }
-    ],
-    size: [
-        {
-            type: String,
-            default: null,
-        }
-    ],
-    productWeight: [
-        {
-            type: String,
-            default: null,
-        }
-    ],
+    // productRam: [
+    //     {
+    //         type: String,
+    //         default: null,
+    //     }
+    // ],
+    // size: [
+    //     {
+    //         type: String,
+    //         default: null,
+    //     }
+    // ],
+    // productWeight: [
+    //     {
+    //         type: String,
+    //         default: null,
+    //     }
+    // ],
     dateCreated: {
         type: Date,
         default: Date.now,
