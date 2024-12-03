@@ -1,5 +1,28 @@
 const mongoose = require("mongoose");
 
+const priceSchema = mongoose.Schema({
+    quantity: {
+        type: Number,
+        required: true
+    },
+    actualPrice: {
+        type: Number,
+        required: true
+    },
+    oldPrice: {
+        type: Number,
+        default: 0
+    },
+    discount: {
+        type: Number,
+        default: 0
+    },
+    type: {
+        type: String,
+        default: ''
+    }
+});
+
 const productSchema = mongoose.Schema({
     name: {
         type: String,
@@ -15,6 +38,7 @@ const productSchema = mongoose.Schema({
             required: true
         }
     ],
+    prices: [priceSchema],
     brand: {
         type: String,
         default: ''
@@ -28,24 +52,24 @@ const productSchema = mongoose.Schema({
         default: 0
     },
     catName:{
-        type:String,
-        default:''
+        type: String,
+        default: ''
     },
     catId:{
-        type:String,
-        default:''
+        type: String,
+        default: ''
     },
     subCatId:{
-        type:String,
-        default:''
+        type: String,
+        default: ''
     },
     subCat:{
-        type:String,
-        default:''
+        type: String,
+        default: ''
     },
     subCatName:{
-        type:String,
-        default:''
+        type: String,
+        default: ''
     },
     category: {
         type: mongoose.Schema.Types.ObjectId,
@@ -66,7 +90,7 @@ const productSchema = mongoose.Schema({
     },
     discount: {
         type: Number,
-        required: true,
+        default: 0,
     },
     productRam: [
         {
@@ -86,22 +110,11 @@ const productSchema = mongoose.Schema({
             default: null,
         }
     ],
-//     location: [
-//     {
-//       value: {
-//         type: String,
-//       },
-//       label: {
-//         type: String,
-//       }
-//     },
-//   ],
     dateCreated: {
         type: Date,
         default: Date.now,
-    },
-})
-
+    }
+});
 
 productSchema.virtual('id').get(function () {
     return this._id.toHexString();

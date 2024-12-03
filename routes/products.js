@@ -722,64 +722,85 @@ router.post(`/recentlyViewd`, async (req, res) => {
 
 router.post(`/create`, async (req, res) => {
   try {
-    // Validate category
-    const category = await Category.findById(req.body.category);
-    if (!category) {
-      return res.status(404).send("Invalid Category!");
-    }
+      // Validate category
+      const category = await Category.findById(req.body.category);
+      if (!category) {
+          return res.status(400).json({
+              success: false,
+              message: "Invalid Category!"
+          });
+      }
 
-    // Fetch uploaded images
-    const images_Array = req.body.images;
-    const uploadedImages = await ImageUpload.find(); // Adjust filter logic if needed
-    console.log(uploadedImages);
+      // Validate required fields
+      if (!req.body.name || !req.body.description) {
+          return res.status(400).json({
+              success: false,
+              message: "Name and description are required!"
+          });
+      }
 
-    uploadedImages.forEach((item) => {
-      item.images.forEach((image) => {
-        images_Array.push(image);
+      // Handle images
+      const images_Array = req.body.images || [];
+      
+      // Validate prices array
+      const prices = req.body.prices?.map(price => ({
+          quantity: Number(price.quantity) || 0,
+          actualPrice: Number(price.actualPrice) || 0,
+          oldPrice: Number(price.oldPrice) || 0,
+          discount: Number(price.discount) || 0,
+          type: price.type || ''
+      })) || [];
+
+      // Create product with all fields
+      let product = new Product({
+          name: req.body.name,
+          description: req.body.description,
+          images: images_Array,
+          prices: prices,
+          brand: req.body.brand || '',
+          price: Number(req.body.price) || 0,
+          oldPrice: Number(req.body.oldPrice) || 0,
+          catId: req.body.catId || '',
+          catName: req.body.catName || '',
+          subCat: req.body.subCat || '',
+          subCatId: req.body.subCatId || '',
+          subCatName: req.body.subCatName || '',
+          category: req.body.category,
+          countInStock: Number(req.body.countInStock) || 0,
+          rating: Number(req.body.rating) || 0,
+          isFeatured: Boolean(req.body.isFeatured),
+          discount: Number(req.body.discount) || 0,
+          productRam: Array.isArray(req.body.productRam) ? req.body.productRam : [],
+          size: Array.isArray(req.body.size) ? req.body.size : [],
+          productWeight: Array.isArray(req.body.productWeight) ? req.body.productWeight : []
       });
-    });
 
-    console.log("Images Array: ", images_Array); // Debugging log
+      // Save the product
+      product = await product.save();
 
-    // Create product
-    let product = new Product({
-      name: req.body.name,
-      description: req.body.description,
-      images: images_Array,
-      brand: req.body.brand,
-      price: req.body.price,
-      oldPrice: req.body.oldPrice,
-      catId: req.body.catId,
-      catName: req.body.catName,
-      subCat: req.body.subCat,
-      subCatId: req.body.subCatId,
-      subCatName: req.body.subCatName,
-      category: req.body.category,
-      countInStock: req.body.countInStock,
-      rating: req.body.rating,
-      isFeatured: req.body.isFeatured,
-      discount: req.body.discount,
-      productRam: req.body.productRam,
-      size: req.body.size,
-      productWeight: req.body.productWeight,
-      // location: req.body.location !== "" ? req.body.location : "All",
-    });
+      if (!product) {
+          return res.status(500).json({
+              success: false,
+              message: "The product cannot be created!"
+          });
+      }
 
-    product = await product.save();
+      // Return success response
+      return res.status(201).json({
+          success: true,
+          data: product,
+          message: "Product created successfully!"
+      });
 
-    // Check if save was successful
-    if (!product) {
-      return res.status(500).json({ success: false, message: "Failed to create product" });
-    }
-
-    // Respond with the created product
-    return res.status(201).json(product);
   } catch (error) {
-    console.error("Error creating product:", error);
-    return res.status(500).json({ success: false, message: "Server Error", error });
+      console.error("Error creating product:", error);
+      return res.status(500).json({
+          success: false,
+          message: "Internal server error",
+          error: error.message
+      });
   }
 });
-
 
 router.get("/:id", async (req, res) => {
   productEditId = req.params.id;
