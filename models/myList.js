@@ -1,5 +1,29 @@
 const mongoose = require('mongoose');
 
+
+const priceSchema = mongoose.Schema({
+    quantity: {
+        type: Number,
+        required: true
+    },
+    actualPrice: {
+        type: Number,
+        required: true
+    },
+    oldPrice: {
+        type: Number,
+        default: 0
+    },
+    discount: {
+        type: Number,
+        default: 0
+    },
+    type: {
+        type: String,
+        default: ''
+    }
+});
+
 const myListSchema = mongoose.Schema({
     productTitle:{
         type:String,
@@ -13,9 +37,27 @@ const myListSchema = mongoose.Schema({
         type:Number,
         required:true
     },
-    price:{
-        type:Number,
-        required:true
+    priceDetails:{
+        quantity: {
+            type: Number,
+            required: true
+        },
+        actualPrice: {
+            type: Number,
+            required: true
+        },
+        oldPrice: {
+            type: Number,
+            default: 0
+        },
+        discount: {
+            type: Number,
+            default: 0
+        },
+        type: {
+            type: String,
+            default: ''
+        }
     },
     productId:{
         type:String,

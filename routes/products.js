@@ -284,33 +284,41 @@ router.get(`/catName`, async (req, res) => {
 //   }
 // });
 
-router.get(`/catId`, async (req, res) => {
-  const page = parseInt(req.query.page) || 1; // Current page number
-  const perPage = parseInt(req.query.perPage); // Items per page
+router.get(`/catId/:catId`, async (req, res) => {
+  const { catId } = req.params; // Extract catId from URL params
+  const page = parseInt(req.query.page) || 1; // Page number from query
+  const perPage = parseInt(req.query.perPage) || 10; // Items per page
 
-  // Count total products matching the catId
-  const totalPosts = await Product.countDocuments({ catId: req.query.catId });
-  const totalPages = Math.ceil(totalPosts / perPage); // Calculate total pages
+  try {
+    // Dynamic query
+    const query = catId === "all" ? {} : { catId };
 
-  // Handle case where requested page exceeds total pages
-  if (page > totalPages) {
-    return res.status(404).json({ message: "Page not found" });
+    // Count total products
+    const totalPosts = await Product.countDocuments(query);
+    const totalPages = Math.ceil(totalPosts / perPage);
+
+    if (page > totalPages) {
+      return res.status(404).json({ message: "Page not found" });
+    }
+
+    // Fetch paginated products
+    const productList = await Product.find(query)
+      .populate("category")
+      .skip((page - 1) * perPage)
+      .limit(perPage)
+      .exec();
+
+    return res.status(200).json({
+      products: productList,
+      totalPages: totalPages,
+      page: page,
+      totalPosts: totalPosts,
+    });
+  } catch (error) {
+    return res.status(500).json({ message: "Error fetching products", error });
   }
-
-  // Fetch products filtered by catId with pagination
-  const productList = await Product.find({ catId: req.query.catId })
-    .populate("category") // Populate the category field
-    .skip((page - 1) * perPage) // Skip products for previous pages
-    .limit(perPage) // Limit the number of products returned
-    .exec();
-
-  // Respond with the filtered and paginated product list
-  return res.status(200).json({
-    products: productList,
-    totalPages: totalPages,
-    page: page,
-  });
 });
+
 
 
 // router.get(`/subCatId`, async (req, res) => {
