@@ -21,6 +21,7 @@ router.get("/", async (req, res) => {
 // POST: Add a new cart item
 router.post("/add", async (req, res) => {
   try {
+    // Check if the product already exists in the user's cart
     const existingItem = await Cart.findOne({ productId: req.body.productId, userId: req.body.userId });
 
     if (existingItem) {
@@ -29,6 +30,14 @@ router.post("/add", async (req, res) => {
         .json({ success: false, message: "Product already exists in the cart." });
     }
 
+    // Check if there's enough stock available
+    if (req.body.quantity > req.body.countInStock) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Insufficient stock available." });
+    }
+
+    // Create the new cart item
     const cartItem = new Cart({
       productTitle: req.body.productTitle,
       image: req.body.image,
@@ -41,6 +50,7 @@ router.post("/add", async (req, res) => {
       userId: req.body.userId,
     });
 
+    // Save the cart item to the database
     const savedItem = await cartItem.save();
     res.status(201).json(savedItem);
   } catch (error) {
@@ -51,6 +61,7 @@ router.post("/add", async (req, res) => {
 // DELETE: Remove a cart item
 router.delete("/:id", async (req, res) => {
   try {
+    // Find and delete the cart item
     const deletedItem = await Cart.findByIdAndDelete(req.params.id);
 
     if (!deletedItem) {
@@ -81,12 +92,18 @@ router.get("/:id", async (req, res) => {
 // PUT: Update a cart item
 router.put("/:id", async (req, res) => {
   try {
-    const updatedCartItem = await Cart.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-    });
+    // Update the cart item
+    const updatedCartItem = await Cart.findByIdAndUpdate(req.params.id, req.body, { new: true });
 
     if (!updatedCartItem) {
       return res.status(404).json({ success: false, message: "Cart item not found." });
+    }
+
+    // Check if there is enough stock available after update (only if quantity is updated)
+    if (req.body.quantity && req.body.quantity > updatedCartItem.countInStock) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Insufficient stock available." });
     }
 
     res.status(200).json(updatedCartItem);

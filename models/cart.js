@@ -47,10 +47,6 @@ const cartSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-  productId: {
-    type: String,
-    required: true,
-  },
   countInStock: {
     type: Number,
     required: true,
