@@ -1,6 +1,5 @@
-const { Cart } = require("../models/cart");
+const { Cart } = require('../models/cart');
 const express = require("express");
-const { check, validationResult } = require("express-validator");
 
 const router = express.Router();
 
@@ -20,51 +19,34 @@ router.get("/", async (req, res) => {
 });
 
 // POST: Add a new cart item
-router.post(
-  "/add",
-  [
-    check("productTitle").notEmpty().withMessage("Product title is required."),
-    check("image").notEmpty().withMessage("Image is required."),
-    check("rating").isNumeric().withMessage("Rating must be a number."),
-    check("quantity").isInt({ min: 1 }).withMessage("Quantity must be at least 1."),
-    check("subTotal").isNumeric().withMessage("SubTotal must be a number."),
-    check("productId").notEmpty().withMessage("Product ID is required."),
-    check("userId").notEmpty().withMessage("User ID is required."),
-  ],
-  async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ success: false, errors: errors.array() });
+router.post("/add", async (req, res) => {
+  try {
+    const existingItem = await Cart.findOne({ productId: req.body.productId, userId: req.body.userId });
+
+    if (existingItem) {
+      return res
+        .status(409)
+        .json({ success: false, message: "Product already exists in the cart." });
     }
 
-    try {
-      const existingItem = await Cart.findOne({ productId: req.body.productId, userId: req.body.userId });
+    const cartItem = new Cart({
+      productTitle: req.body.productTitle,
+      image: req.body.image,
+      rating: req.body.rating,
+      priceDetails: req.body.priceDetails,
+      quantity: req.body.quantity,
+      subTotal: req.body.subTotal,
+      productId: req.body.productId,
+      countInStock: req.body.countInStock,
+      userId: req.body.userId,
+    });
 
-      if (existingItem) {
-        return res
-          .status(409)
-          .json({ success: false, message: "Product already exists in the cart." });
-      }
-
-      const cartItem = new Cart({
-        productTitle: req.body.productTitle,
-        image: req.body.image,
-        rating: req.body.rating,
-        priceDetails: req.body.priceDetails,
-        quantity: req.body.quantity,
-        subTotal: req.body.subTotal,
-        productId: req.body.productId,
-        countInStock: req.body.countInStock,
-        userId: req.body.userId,
-      });
-
-      const savedItem = await cartItem.save();
-      res.status(201).json(savedItem);
-    } catch (error) {
-      res.status(500).json({ success: false, error: error.message });
-    }
+    const savedItem = await cartItem.save();
+    res.status(201).json(savedItem);
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
   }
-);
+});
 
 // DELETE: Remove a cart item
 router.delete("/:id", async (req, res) => {
@@ -97,32 +79,20 @@ router.get("/:id", async (req, res) => {
 });
 
 // PUT: Update a cart item
-router.put(
-  "/:id",
-  [
-    check("quantity").optional().isInt({ min: 1 }).withMessage("Quantity must be at least 1."),
-    check("subTotal").optional().isNumeric().withMessage("SubTotal must be a number."),
-  ],
-  async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ success: false, errors: errors.array() });
+router.put("/:id", async (req, res) => {
+  try {
+    const updatedCartItem = await Cart.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+    });
+
+    if (!updatedCartItem) {
+      return res.status(404).json({ success: false, message: "Cart item not found." });
     }
 
-    try {
-      const updatedCartItem = await Cart.findByIdAndUpdate(req.params.id, req.body, {
-        new: true,
-      });
-
-      if (!updatedCartItem) {
-        return res.status(404).json({ success: false, message: "Cart item not found." });
-      }
-
-      res.status(200).json(updatedCartItem);
-    } catch (error) {
-      res.status(500).json({ success: false, error: error.message });
-    }
+    res.status(200).json(updatedCartItem);
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
   }
-);
+});
 
 module.exports = router;
