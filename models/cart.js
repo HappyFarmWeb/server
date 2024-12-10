@@ -1,55 +1,73 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const cartSchema = mongoose.Schema({
-    productTitle:{
-        type:String,
-        required:true
+  productTitle: {
+    type: String,
+    required: true,
+  },
+  image: {
+    type: String,
+    required: true,
+  },
+  rating: {
+    type: Number,
+    required: true,
+  },
+  priceDetails: {
+    quantity: {
+      type: Number,
+      required: true,
     },
-    image:{
-        type:String,
-        required:true
+    actualPrice: {
+      type: Number,
+      required: true,
     },
-    rating:{
-        type:Number,
-        required:true
+    oldPrice: {
+      type: Number,
+      default: 0,
     },
-    price:{
-        type:Number,
-        required:true
+    discount: {
+      type: Number,
+      default: 0,
     },
-    quantity:{
-        type:Number,
-        required:true
+    type: {
+      type: String,
+      default: "",
     },
-    subTotal:{
-        type:Number,
-        required:true
-    },
-    productId:{
-        type:String,
-        required:true
-    },
-        productId:{
-        type:String,
-        required:true
-    },
-    countInStock:{
-        type:Number,
-        required:true
-    },
-    userId:{
-        type:String,
-        required:true
-    }
-})
-
-cartSchema.virtual('id').get(function () {
-    return this._id.toHexString();
+  },
+  quantity: {
+    type: Number,
+    required: true,
+  },
+  subTotal: {
+    type: Number,
+    required: true,
+  },
+  productId: {
+    type: String,
+    required: true,
+  },
+  productId: {
+    type: String,
+    required: true,
+  },
+  countInStock: {
+    type: Number,
+    required: true,
+  },
+  userId: {
+    type: String,
+    required: true,
+  },
 });
 
-cartSchema.set('toJSON', {
-    virtuals: true,
+cartSchema.virtual("id").get(function () {
+  return this._id.toHexString();
 });
 
-exports.Cart = mongoose.model('Cart', cartSchema);
+cartSchema.set("toJSON", {
+  virtuals: true,
+});
+
+exports.Cart = mongoose.model("Cart", cartSchema);
 exports.cartSchema = cartSchema;
