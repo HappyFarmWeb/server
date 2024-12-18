@@ -18,9 +18,9 @@ const userRoutes = require('./routes/user.js');
 const categoryRoutes = require('./routes/categories');
 const productRoutes = require('./routes/products');
 const imageUploadRoutes = require('./helper/imageUpload.js');
-const productWeightRoutes = require('./routes/productWeight.js');
-const productRAMSRoutes = require('./routes/productRAMS.js');
-const productSIZESRoutes = require('./routes/productSize.js');
+// const productWeightRoutes = require('./routes/productWeight.js');
+// const productRAMSRoutes = require('./routes/productRAMS.js');
+// const productSIZESRoutes = require('./routes/productSize.js');
 const productReviews = require('./routes/productReviews.js');
 const cartSchema = require('./routes/cart.js');
 const myListSchema = require('./routes/myList.js');
@@ -36,9 +36,9 @@ app.use("/uploads",express.static("uploads"));
 app.use(`/api/category`, categoryRoutes);
 app.use(`/api/products`, productRoutes);
 app.use(`/api/imageUpload`, imageUploadRoutes);
-app.use(`/api/productWeight`, productWeightRoutes);
-app.use(`/api/productRAMS`, productRAMSRoutes);
-app.use(`/api/productSIZE`, productSIZESRoutes);
+// app.use(`/api/productWeight`, productWeightRoutes);
+// app.use(`/api/productRAMS`, productRAMSRoutes);
+// app.use(`/api/productSIZE`, productSIZESRoutes);
 app.use(`/api/productReviews`, productReviews);
 app.use(`/api/cart`, cartSchema);
 app.use(`/api/my-list`, myListSchema);
@@ -50,13 +50,12 @@ app.use(`/api/homeSideBanners`, homeSideBannerSchema);
 app.use(`/api/homeBottomBanners`, homeBottomBannerSchema);
 
 
-
 //Database
 mongoose.connect(process.env.CONNECTION_STRING, {
     useNewUrlParser: true,
     useUnifiedTopology: true
 })
-    .then(() => {
+    .then(() => {``
         console.log('Database Connection is ready...');
         //Server
         app.listen(process.env.PORT, () => {
