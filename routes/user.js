@@ -18,7 +18,7 @@ cloudinary.config({
   api_secret: process.env.cloudinary_Config_api_secret,
   secure: true,
 });
-
+ 
 var imagesArr = [];
 
 const storage = multer.diskStorage({
@@ -183,7 +183,6 @@ router.put(`/verifyAccount/emailVerify/:id`, async (req, res) => {
 
   try {
     const existingUser = await User.findOne({ email: email });
-
     console.log(existingUser);
 
     if (existingUser) {

@@ -77,7 +77,7 @@ const productSchema = mongoose.Schema({
         required: true
     },
     countInStock: {
-        type: Number,
+        type: Boolean,
         required: true,
     },
     rating: {
