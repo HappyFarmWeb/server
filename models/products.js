@@ -63,10 +63,10 @@ const productSchema = mongoose.Schema({
         type: String,
         default: ''
     },
-    subCat:{
-        type: String,
-        default: ''
-    },
+    // subCat:{
+    //     type: String,
+    //     default: ''
+    // },
     subCatName:{
         type: String,
         default: ''
