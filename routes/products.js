@@ -321,6 +321,7 @@ router.get(`/catName`, async (req, res) => {
 router.get("/catId/:catId", async (req, res) => {
   const { catId } = req.params; // Extract catId from URL params
   const page = parseInt(req.query.page) || 1; // Page number from query
+  console.log(catId)
   const perPage = parseInt(req.query.perPage) || 10; // Items per page
 
   try {
@@ -352,6 +353,45 @@ router.get("/catId/:catId", async (req, res) => {
     return res.status(500).json({ message: "Error fetching products", error });
   }
 });
+
+
+router.get("/category", async (req, res) => {
+  const { catId } = req.body; // Extract catId from URL params
+  
+  const page = parseInt(req.query.page) || 1; // Page number from query
+  console.log(catId)
+  const perPage = parseInt(req.query.perPage) || 10; // Items per page
+
+  try {
+    // Dynamic query
+    const query = catId === "all" ? {} : { catId };
+
+    // Count total products
+    const totalPosts = await Product.countDocuments(query);
+    const totalPages = Math.ceil(totalPosts / perPage);
+
+    if (page > totalPages) {
+      return res.status(404).json({ message: "Page not found" });
+    }
+
+    // Fetch paginated products
+    const productList = await Product.find(query)
+      .populate("category")
+      .skip((page - 1) * perPage)
+      .limit(perPage)
+      .exec();
+
+    return res.status(200).json({
+      products: productList,
+      totalPages: totalPages,
+      page: page,
+      totalPosts: totalPosts,
+    });
+  } catch (error) {
+    return res.status(500).json({ message: "Error fetching products", error });
+  }
+});
+
 
 
 
