@@ -88,10 +88,10 @@ const productSchema = mongoose.Schema({
         type: Boolean,
         default: false,
     },
-    discount: {
-        type: Number,
-        default: 0,
-    },
+    // discount: {
+    //     type: Number,
+    //     default: 0,
+    // },
     // productRam: [
     //     {
     //         type: String,
