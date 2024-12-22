@@ -382,9 +382,11 @@ router.post(`/create`, async (req, res) => {
           prices: prices,
           catId: req.body.catId || '',
           subCatId: req.body.subCatId || '',
+          subCatName: req.body.subCatName || '',
+          category: req.body.category,
           rating: Number(req.body.rating) || 0,
           isFeatured: Boolean(req.body.isFeatured),
-          
+         
       });
 
       // Save the product

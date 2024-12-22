@@ -21,7 +21,7 @@ const priceSchema = mongoose.Schema({
         type: String,
         default: ''
     },
-    countInStock: {
+    countInStock:{
         type: Number,
         default: 0
     }
@@ -44,6 +44,10 @@ const productSchema = mongoose.Schema({
     ],
     prices: [priceSchema],
     
+    catName:{
+        type: String,
+        default: ''
+    },
     catId:{
         type: String,
         default: ''
@@ -52,7 +56,23 @@ const productSchema = mongoose.Schema({
         type: String,
         default: ''
     },
-    
+    subCat:{
+        type: String,
+        default: ''
+    },
+    subCatName:{
+        type: String,
+        default: ''
+    },
+    category: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Category',
+        required: true
+    },
+    countInStock: {
+        type: Boolean,
+        required: true,
+    },
     rating: {
         type: Number,
         default: 0,
