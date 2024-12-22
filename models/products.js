@@ -20,6 +20,10 @@ const priceSchema = mongoose.Schema({
     type: {
         type: String,
         default: ''
+    },
+    countInStock:{
+        type: Number,
+        default: 0
     }
 });
 
@@ -39,18 +43,7 @@ const productSchema = mongoose.Schema({
         }
     ],
     prices: [priceSchema],
-    // brand: {
-    //     type: String,
-    //     default: ''
-    // },
-    // price: {
-    //     type: Number,
-    //     default: 0
-    // },
-    // oldPrice: {
-    //     type: Number,
-    //     default: 0
-    // },
+    
     catName:{
         type: String,
         default: ''
@@ -63,10 +56,10 @@ const productSchema = mongoose.Schema({
         type: String,
         default: ''
     },
-    // subCat:{
-    //     type: String,
-    //     default: ''
-    // },
+    subCat:{
+        type: String,
+        default: ''
+    },
     subCatName:{
         type: String,
         default: ''
@@ -88,28 +81,6 @@ const productSchema = mongoose.Schema({
         type: Boolean,
         default: false,
     },
-    // discount: {
-    //     type: Number,
-    //     default: 0,
-    // },
-    // productRam: [
-    //     {
-    //         type: String,
-    //         default: null,
-    //     }
-    // ],
-    // size: [
-    //     {
-    //         type: String,
-    //         default: null,
-    //     }
-    // ],
-    // productWeight: [
-    //     {
-    //         type: String,
-    //         default: null,
-    //     }
-    // ],
     dateCreated: {
         type: Date,
         default: Date.now,

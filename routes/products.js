@@ -379,22 +379,15 @@ router.post(`/create`, async (req, res) => {
           description: req.body.description,
           images: images_Array,
           prices: prices,
-          brand: req.body.brand || '',
-          price: Number(req.body.price) || 0,
-          oldPrice: Number(req.body.oldPrice) || 0,
           catId: req.body.catId || '',
           catName: req.body.catName || '',
           subCat: req.body.subCat || '',
           subCatId: req.body.subCatId || '',
           subCatName: req.body.subCatName || '',
           category: req.body.category,
-          countInStock: Number(req.body.countInStock) || 0,
           rating: Number(req.body.rating) || 0,
           isFeatured: Boolean(req.body.isFeatured),
-          discount: Number(req.body.discount) || 0,
-          productRam: Array.isArray(req.body.productRam) ? req.body.productRam : [],
-          size: Array.isArray(req.body.size) ? req.body.size : [],
-          productWeight: Array.isArray(req.body.productWeight) ? req.body.productWeight : []
+         
       });
 
       // Save the product
