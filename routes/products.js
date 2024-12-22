@@ -373,6 +373,7 @@ router.post(`/create`, async (req, res) => {
           countInStock: Number(price.countInStock) || 0,
           type: price.type || ''
       })) || [];
+      console.log(prices);
 
       // Create product with all fields
       let product = new Product({
