@@ -20,12 +20,12 @@ router.get(`/`, async (req, res) => {
 
   
         if (req.query.page !== undefined && req.query.perPage !== undefined) {
-            subCtegoryList = await SubCategory.find().populate("category")
+            subCtegoryList = await SubCategory.find().populate("catId")
             .skip((page - 1) * perPage)
             .limit(perPage)
             .exec();
         }else{
-            subCtegoryList = await SubCategory.find().populate("category");
+            subCtegoryList = await SubCategory.find().populate("catId");
         }
         
       
@@ -63,7 +63,7 @@ router.get(`/get/count`, async (req, res) =>{
 
 router.get('/:id', async (req, res) => {
 console.log(req.params.id)
-    const subCat = await SubCategory.findById(req.params.id).populate("category");
+    const subCat = await SubCategory.findById(req.params.id).populate("catId");
 
     if (!subCat) {
         res.status(500).json({ message: 'The sub category with the given ID was not found.' })

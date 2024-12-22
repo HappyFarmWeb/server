@@ -498,7 +498,7 @@ router.delete("/:id", async (req, res) => {
 router.put("/:id", async (req, res) => {
   try {
       // Validate category
-      const category = await Category.findById(req.body.category);
+      const category = await Category.findById(req.body.catId);
       if (!category) {
           return res.status(400).json({
               success: false,
