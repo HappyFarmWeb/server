@@ -345,6 +345,7 @@ router.post(`/recentlyViewd`, async (req, res) => {
 router.post(`/create`, async (req, res) => {
   try {
       // Validate category
+      console.log(req.body)
       const category = await Category.findById(req.body.catId);
       if (!category) {
           return res.status(400).json({
@@ -379,6 +380,8 @@ router.post(`/create`, async (req, res) => {
           name: req.body.name,
           description: req.body.description,
           images: images_Array,
+          catName:req.body.catName,
+          subCat:req.body.subCat,
           prices: prices,
           catId: req.body.catId || '',
           subCatId: req.body.subCatId || '',
@@ -419,7 +422,7 @@ router.post(`/create`, async (req, res) => {
 router.get("/:id", async (req, res) => {
   productEditId = req.params.id;
 
-  const product = await Product.findById(req.params.id).populate("z");
+  const product = await Product.findById(req.params.id)
 
   if (!product) {
     res
