@@ -373,7 +373,6 @@ router.post(`/create`, async (req, res) => {
           countInStock: Number(price.countInStock) || 0,
           type: price.type || ''
       })) || [];
-      console.log(prices);
 
       // Create product with all fields
       let product = new Product({
@@ -418,7 +417,7 @@ router.post(`/create`, async (req, res) => {
 router.get("/:id", async (req, res) => {
   productEditId = req.params.id;
 
-  const product = await Product.findById(req.params.id);
+  const product = await Product.findById(req.params.id).populate("z");
 
   if (!product) {
     res
@@ -498,7 +497,7 @@ router.delete("/:id", async (req, res) => {
 router.put("/:id", async (req, res) => {
   try {
       // Validate category
-      const category = await Category.findById(req.body.catId);
+      const category = await Category.findById(req.body.category);
       if (!category) {
           return res.status(400).json({
               success: false,
