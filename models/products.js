@@ -20,6 +20,10 @@ const priceSchema = mongoose.Schema({
     type: {
         type: String,
         default: ''
+    },
+    countInStock: {
+        type: Number,
+        default: 0
     }
 });
 
@@ -76,10 +80,10 @@ const productSchema = mongoose.Schema({
         ref: 'Category',
         required: true
     },
-    countInStock: {
-        type: Boolean,
-        required: true,
-    },
+    // countInStock: {
+    //     type: Boolean,
+    //     required: true,
+    // },
     rating: {
         type: Number,
         default: 0,
