@@ -1,17 +1,15 @@
 const mongoose = require('mongoose');
 
-
-
 const categorySchema = mongoose.Schema({
     name:{
         type:String,
         required:true
     },
-    slug:{
-        type:String,
-        required:true,
-        unique:true
-    },
+    // slag:{
+    //     type:String,
+    //     required:true,
+    //     sparse: true
+    // },
     images:[
         {
             type:String,

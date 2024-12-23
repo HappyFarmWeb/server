@@ -4,7 +4,6 @@ const express = require("express");
 const router = express.Router();
 const multer = require("multer");
 const fs = require("fs");
-const slugify = require("slugify");
 
 const cloudinary = require("cloudinary").v2;
 
@@ -80,7 +79,7 @@ const createCategories = (categories, parentId=null) => {
       name: cat.name,
       images:cat.images,
       color:cat.color,
-      slug: cat.slug,
+      // slag: cat.slag,
       children: createCategories(categories, cat._id)
     });
   }
@@ -163,7 +162,7 @@ const createCat = (categories, parentId=null,cat) => {
     name: cat.name,
     images:cat.images,
     color:cat.color,
-    slug: cat.slug,
+    // slag: cat.slag,
     children: category
   });
 
@@ -209,12 +208,12 @@ router.post("/create", async (req, res) => {
       name: req.body.name,
       images: imagesArr,
       color: req.body.color,
-      slug: req.body.name,
+      // slag: req.body.name,
     };
   } else {
     catObj = {
       name: req.body.name,
-      slug: req.body.name,
+      // slag: req.body.name,
     };
   }
 

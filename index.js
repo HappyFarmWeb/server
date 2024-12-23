@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const cors = require('cors');
 require('dotenv/config');
-
+const Category = require('./models/category')
 app.use(cors());
 app.options('*', cors())
 
@@ -50,7 +50,7 @@ app.use(`/api/homeSideBanners`, homeSideBannerSchema);
 app.use(`/api/homeBottomBanners`, homeBottomBannerSchema);
 
 
-//Database
+// Database
 mongoose.connect(process.env.CONNECTION_STRING, {
 })
     .then(() => {``
@@ -63,7 +63,6 @@ mongoose.connect(process.env.CONNECTION_STRING, {
     .catch((err) => {
         console.log(err);
     })
-
 
     process.on('uncaughtException', (err) => {
         console.error('Uncaught Exception:', err);
