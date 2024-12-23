@@ -63,3 +63,13 @@ mongoose.connect(process.env.CONNECTION_STRING, {
     .catch((err) => {
         console.log(err);
     })
+
+
+    process.on('uncaughtException', (err) => {
+        console.error('Uncaught Exception:', err);
+        process.exit(1); // Optionally, exit the process if critical
+    });
+    
+    process.on('unhandledRejection', (reason, promise) => {
+        console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+    });
