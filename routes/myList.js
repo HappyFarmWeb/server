@@ -1,17 +1,41 @@
 const { MyList } = require('../models/myList');
 const express = require('express');
 const router = express.Router();
+const mongoose = require('mongoose');
+
+// router.get('/', async (req, res) => {
+//     try {
+//         const myList = await MyList.find(req.query); // Add query filters like userId if provided
+//         if (!myList) {
+//             return res.status(404).json({ success: false, message: 'No items found!' });
+//         }
+//         res.status(200).json(myList);
+//     } catch (error) {
+//         res.status(500).json({ success: false, error: error.message });
+//     }
+// });
 
 
 router.get('/', async (req, res) => {
     try {
-        const myList = await MyList.find(req.query); // Add query filters like userId if provided
-        if (!myList) {
+        const query = req.query;
+
+        // Validate userId if it's included in the query
+        if (query.userId && !mongoose.Types.ObjectId.isValid(query.userId)) {
+            return res.status(400).json({ success: false, message: 'Invalid userId' });
+        }
+
+        // Fetch the data and populate productId
+        const myList = await MyList.find(query).populate('productId');
+
+        if (!myList || myList.length === 0) {
             return res.status(404).json({ success: false, message: 'No items found!' });
         }
-        res.status(200).json(myList);
+
+        res.status(200).json({ success: true, data: myList });
     } catch (error) {
-        res.status(500).json({ success: false, error: error.message });
+        console.error('Error fetching my list:', error);
+        res.status(500).json({ success: false, message: 'Server error', error: error.message });
     }
 });
 
@@ -32,16 +56,6 @@ router.post('/add', async (req, res) => {
         }
 
         const newItem = new MyList({
-            productTitle: req.body.productTitle,
-            image: req.body.image,
-            rating: req.body.rating,
-            priceDetails: {
-                quantity: req.body.priceDetails.quantity,
-                actualPrice: req.body.priceDetails.actualPrice,
-                oldPrice: req.body.priceDetails.oldPrice || 0,
-                discount: req.body.priceDetails.discount || 0,
-                type: req.body.priceDetails.type || '',
-            },
             productId: req.body.productId,
             userId: req.body.userId,
         });
