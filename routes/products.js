@@ -196,37 +196,90 @@ router.get(`/subCatId`, async (req, res) => {
 });
 
 
-router.get(`/filterByPrice`, async (req, res) => {
-  let productList = [];
+// router.get(`/filterByPrice`, async (req, res) => {
+//   let productList = [];
 
-  // Check if `catId` is provided and fetch products accordingly
-  if (req.query.catId !== "" && req.query.catId !== undefined) {
-    productList = await Product.find({ catId: req.query.catId }).populate("category");
-  } 
-  // Check if `subCatId` is provided and fetch products accordingly
-  else if (req.query.subCatId !== "" && req.query.subCatId !== undefined) {
-    productList = await Product.find({ subCatId: req.query.subCatId }).populate("category");
+//   // Check if `catId` is provided and fetch products accordingly
+//   if (req.query.catId !== "" && req.query.catId !== undefined) {
+//     productList = await Product.find({ catId: req.query.catId }).populate("category");
+//   } 
+//   // Check if `subCatId` is provided and fetch products accordingly
+//   else if (req.query.subCatId !== "" && req.query.subCatId !== undefined) {
+//     productList = await Product.find({ subCatId: req.query.subCatId }).populate("category");
+//   }
+
+//   // Filter products based on price range
+//   const filteredProducts = productList.filter((product) => {
+//     if (req.query.minPrice && product.price < parseInt(req.query.minPrice)) {
+//       return false;
+//     }
+//     if (req.query.maxPrice && product.price > parseInt(req.query.maxPrice)) {
+//       return false;
+//     }
+//     return true;
+//   });
+
+//   // Return the filtered products
+//   return res.status(200).json({
+//     products: filteredProducts,
+//     totalPages: 0, // Assuming pagination is not applicable here
+//     page: 0,
+//   });
+// });
+
+router.get('/filterByPrice', async (req, res) => {
+  try {
+    let { minPrice, maxPrice, catId, subCatId } = req.query;
+
+    // Validate ObjectId for catId and subCatId
+    if (catId && !mongoose.isValidObjectId(catId)) {
+      return res.status(400).json({ message: 'Invalid catId' });
+    }
+    if (subCatId && !mongoose.isValidObjectId(subCatId)) {
+      return res.status(400).json({ message: 'Invalid subCatId' });
+    }
+
+    let productList = [];
+
+    // Fetch products based on catId or subCatId
+    if (catId) {
+      productList = await Product.find({ catId }).populate("category");
+    } else if (subCatId) {
+      productList = await Product.find({ subCatId }).populate("category");
+    }
+    
+
+    // Filter products based on price range
+    // const filteredProducts = productList.filter((product) => {
+    //   const price = product.price;
+    //   if (minPrice && price < parseInt(minPrice)) return false;
+    //   if (maxPrice && price > parseInt(maxPrice)) return false;
+    //   return true;
+    // });
+
+    const filteredProducts = productList.filter((product) => {
+      const prices = product.prices; // Get the prices array for the product
+      return prices.some((priceObj) => {
+        const actualPrice = priceObj.actualPrice; // Extract the actualPrice for each price object
+        // Check if the actualPrice falls within the range
+        if (minPrice && actualPrice < parseInt(minPrice)) return false;
+        if (maxPrice && actualPrice > parseInt(maxPrice)) return false;
+        return true;
+      });
+    });
+    
+    
+
+    return res.status(200).json({
+      products: filteredProducts,
+      totalPages: 0,
+      page: 0,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Server error' });
   }
-
-  // Filter products based on price range
-  const filteredProducts = productList.filter((product) => {
-    if (req.query.minPrice && product.price < parseInt(req.query.minPrice)) {
-      return false;
-    }
-    if (req.query.maxPrice && product.price > parseInt(req.query.maxPrice)) {
-      return false;
-    }
-    return true;
-  });
-
-  // Return the filtered products
-  return res.status(200).json({
-    products: filteredProducts,
-    totalPages: 0, // Assuming pagination is not applicable here
-    page: 0,
-  });
 });
-
 
 router.get(`/rating`, async (req, res) => {
   let productList = [];
