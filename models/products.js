@@ -92,3 +92,4 @@ productSchema.set('toJSON', {
 });
 
 exports.Product = mongoose.model('Product', productSchema);
+exports.Price=mongoose.model('Price', priceSchema);

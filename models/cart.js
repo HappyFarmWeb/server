@@ -1,60 +1,30 @@
 const mongoose = require("mongoose");
 
+
 const cartSchema = mongoose.Schema({
-  // productTitle: {
-  //   type: String,
-  //   required: true,
-  // },
-  // image: {
-  //   type: String,
-  //   required: true,
-  // },
-  // rating: {
-  //   type: Number,
-  //   required: true,
-  // },
-  priceDetails: {
-    quantity: {
-      type: Number,
-      required: true,
-    },
-    actualPrice: {
-      type: Number,
-      required: true,
-    },
-    oldPrice: {
-      type: Number,
-      default: 0,
-    },
-    discount: {
-      type: Number,
-      default: 0,
-    },
-    type: {
-      type: String,
-      default: "",
-    },
-  },
-  // quantity: {
-  //   type: Number,
-  //   required: true,
-  // },
-  // subTotal: {
-  //   type: Number,
-  //   required: true,
-  // },
   productId: {
-    type: String,
+    type:mongoose.Schema.Types.ObjectId,
     required: true,
+    ref:"Product"
   },
-  // countInStock: {
-  //   type: Number,
-  //   required: true,
-  // },
+  priceId: {
+    type:mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref:"Price"
+  },
   userId: {
-    type: String,
+    type:mongoose.Schema.Types.ObjectId,
     required: true,
+    ref:"User"
   },
+  quantity:{
+    type:Number,
+    default:1
+  },
+  subTotal:{
+    type:Number
+  }
+
 });
 
 cartSchema.virtual("id").get(function () {
