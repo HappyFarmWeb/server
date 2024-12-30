@@ -1,22 +1,8 @@
 const { MyList } = require('../models/myList');
-const express = require('express');
-const router = express.Router();
 const mongoose = require('mongoose');
 
-// router.get('/', async (req, res) => {
-//     try {
-//         const myList = await MyList.find(req.query); // Add query filters like userId if provided
-//         if (!myList) {
-//             return res.status(404).json({ success: false, message: 'No items found!' });
-//         }
-//         res.status(200).json(myList);
-//     } catch (error) {
-//         res.status(500).json({ success: false, error: error.message });
-//     }
-// });
-
-
-router.get('/', async (req, res) => {
+// Fetch all items in the list
+const getMyList = async (req, res) => {
     try {
         const query = req.query;
 
@@ -37,11 +23,10 @@ router.get('/', async (req, res) => {
         console.error('Error fetching my list:', error);
         res.status(500).json({ success: false, message: 'Server error', error: error.message });
     }
-});
+};
 
-
-
-router.post('/add', async (req, res) => {
+// Add item to the list
+const addItemToMyList = async (req, res) => {
     try {
         const existingItem = await MyList.findOne({
             productId: req.body.productId,
@@ -65,9 +50,10 @@ router.post('/add', async (req, res) => {
     } catch (error) {
         res.status(500).json({ success: false, error: error.message });
     }
-});
+};
 
-router.delete('/:id', async (req, res) => {
+// Delete item from the list
+const deleteItemFromMyList = async (req, res) => {
     try {
         const deletedItem = await MyList.findByIdAndDelete(req.params.id);
 
@@ -85,12 +71,10 @@ router.delete('/:id', async (req, res) => {
     } catch (error) {
         res.status(500).json({ success: false, error: error.message });
     }
-});
+};
 
-
-
-
-router.get('/:id', async (req, res) => {
+// Fetch a single item by ID
+const getItemById = async (req, res) => {
     try {
         const item = await MyList.findById(req.params.id);
 
@@ -105,10 +89,10 @@ router.get('/:id', async (req, res) => {
     } catch (error) {
         res.status(500).json({ success: false, error: error.message });
     }
-});
+};
 
-
-router.put('/:id', async (req, res) => {
+// Update item details
+const updateItem = async (req, res) => {
     try {
         const updatedItem = await MyList.findByIdAndUpdate(
             req.params.id,
@@ -140,9 +124,12 @@ router.put('/:id', async (req, res) => {
     } catch (error) {
         res.status(500).json({ success: false, error: error.message });
     }
-});
+};
 
-
-
-module.exports = router;
-
+module.exports = {
+    getMyList,
+    addItemToMyList,
+    deleteItemFromMyList,
+    getItemById,
+    updateItem
+};

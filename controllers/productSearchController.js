@@ -1,22 +1,19 @@
 const { Product } = require("../models/products.js");
-const express = require("express");
-const router = express.Router();
-const mongoose = require("mongoose");
 
-router.get("/", async (req, res) => {
+const getProducts = async (req, res) => {
   try {
     const query = req.query.q;
-
     const page = parseInt(req.query.page) || 1;
     const perPage = parseInt(req.query.perPage);
-    var totalPosts = [];
-    var totalPages = 0;
+    let totalPosts = 0;
+    let totalPages = 0;
 
     if (!query) {
       return res.status(400).json({ msg: "Query is required" });
     }
 
-    if (req.query.page !== ""  && req.query.page !== undefined && req.query.perPage !== "" && req.query.perPage !== undefined) {
+    // Pagination logic
+    if (req.query.page && req.query.perPage) {
       const items = await Product.find({
         $or: [
           { name: { $regex: query, $options: "i" } },
@@ -25,17 +22,23 @@ router.get("/", async (req, res) => {
         ],
       })
         .populate("category")
-       
+        .skip((page - 1) * perPage)
+        .limit(perPage);
 
-        totalPosts = await items.length;
-        totalPages = Math.ceil(totalPosts / perPage);
+      totalPosts = await Product.countDocuments({
+        $or: [
+          { name: { $regex: query, $options: "i" } },
+          { brand: { $regex: query, $options: "i" } },
+          { catName: { $regex: query, $options: "i" } },
+        ],
+      });
+      totalPages = Math.ceil(totalPosts / perPage);
 
-        return res.status(200).json({
-            products: items,
-            totalPages: totalPages,
-            page: page,
-          });
-
+      return res.status(200).json({
+        products: items,
+        totalPages,
+        page,
+      });
     } else {
       const items = await Product.find({
         $or: [
@@ -45,11 +48,11 @@ router.get("/", async (req, res) => {
         ],
       });
 
-      res.json(items);
+      return res.status(200).json(items);
     }
   } catch (err) {
-    res.status(500).json({ msg: "Server error" });
+    return res.status(500).json({ msg: "Server error" });
   }
-});
+};
 
-module.exports = router;
+module.exports = { getProducts };
