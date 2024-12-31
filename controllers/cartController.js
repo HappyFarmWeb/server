@@ -37,7 +37,7 @@ exports.addCartItem = async (req, res) => {
 
     const existingItem = await Cart.findOne({ productId, priceId, userId });
     if (existingItem) {
-      return res.status(409).json({ success: false, message: "Product already exists in the cart." });
+      return res.status(200).json({ success: false, message: "Product already exists in the cart." });
     }
 
     const product = await Product.findById(productId);
