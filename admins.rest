@@ -1,22 +1,31 @@
 ###
-POST https://server-13t5.onrender.com/api/user/signup
+POST https://server-13t5.onrender.com/api/user/admin/signup
 Content-Type: application/json
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNyaWJhYnVtYW5kcmFqdUBnbWFpbC5jb20iLCJpZCI6IjY3NGMyYzk3YTY3MDkxMDc5MDYyY2UxNCIsImlzQWRtaW4iOnRydWUsImlhdCI6MTczNjQ0NzI1Mn0.RdD6-dMesr8psz5bv8hSdvwI6FED7dHB913oQGVi_mw
 
 {
   "name": "Admin User",
-  "phone": "9876543210",
+  "phone": "1234567890",
   "email": "admin@example.com",
   "password": "AdminPass123"
 }
 
+
 ###
-POST https://server-13t5.onrender.com/api/user/signin
+POST https://server-13t5.onrender.com/api/user/admin/signin
 Content-Type: application/json
 
 {
-  "phone": "9876543210",
+  "email": "sribabumandraju@gmail.com",
   "password": "123456"
 }
+
+###
+GET https://server-13t5.onrender.com/api/user
+Content-Type: application/json
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNyaWJhYnVtYW5kcmFqdUBnbWFpbC5jb20iLCJpZCI6IjY3NGMyYzk3YTY3MDkxMDc5MDYyY2UxNCIsImlzQWRtaW4iOnRydWUsImlhdCI6MTczNjQ0NzI1Mn0.RdD6-dMesr8psz5bv8hSdvwI6FED7dHB913oQGVi_mw
+
+
 
 
 
