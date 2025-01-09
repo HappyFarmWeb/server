@@ -1,0 +1,23 @@
+###
+POST https://server-13t5.onrender.com/api/user/signup
+Content-Type: application/json
+
+{
+    "name": "sribaaabu",
+    "email": "srrri@gmail.com",
+    "phone": "9876543210",
+    "password": "123456",
+    "isAdmin": false
+}
+
+###
+POST https://server-13t5.onrender.com/api/user/signin
+Content-Type: application/json
+
+{
+  "phone": "9876543210",
+  "password": "123456"
+}
+
+
+
