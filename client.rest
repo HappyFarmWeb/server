@@ -30,24 +30,6 @@ Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNyaWJhYn
 }
 
 
-###
-POST https://server-13t5.onrender.com/api/user/verifyAccount/resendOtp
-Content-Type: application/json
-
-{
-  "email": "sribabumandraju@gmail.com"
-}
-
-
-
-###
-POST https://server-13t5.onrender.com/api/user/verifyAccount/emailVerify/674c2c97a67091079062ce14
-Content-Type: application/json
-
-{
-  "email": "sribabumandraju@gmail.com",
-  "otp": "399698"
-}
 
 
 

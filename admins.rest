@@ -33,6 +33,41 @@ Content-Type: application/json
 Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNyaWJhYnVtYW5kcmFqdUBnbWFpbC5jb20iLCJpZCI6IjY3NGMyYzk3YTY3MDkxMDc5MDYyY2UxNCIsImlzQWRtaW4iOnRydWUsImlhdCI6MTczNjQ0NzI1Mn0.RdD6-dMesr8psz5bv8hSdvwI6FED7dHB913oQGVi_mw
 
 
+###
+POST https://server-13t5.onrender.com/api/user/verifyAccount/resendOtp
+Content-Type: application/json
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNyaWJhYnVtYW5kcmFqdUBnbWFpbC5jb20iLCJpZCI6IjY3NGMyYzk3YTY3MDkxMDc5MDYyY2UxNCIsImlzQWRtaW4iOnRydWUsImlhdCI6MTczNjQ0NzI1Mn0.RdD6-dMesr8psz5bv8hSdvwI6FED7dHB913oQGVi_mw
+
+
+{
+  "email": "sribabumandraju@gmail.com"
+}
+
+
+
+###
+PUT https://server-13t5.onrender.com/api/user/verifyAccount/emailVerify/674c2c97a67091079062ce14
+Content-Type: application/json
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNyaWJhYnVtYW5kcmFqdUBnbWFpbC5jb20iLCJpZCI6IjY3NGMyYzk3YTY3MDkxMDc5MDYyY2UxNCIsImlzQWRtaW4iOnRydWUsImlhdCI6MTczNjQ0NzI1Mn0.RdD6-dMesr8psz5bv8hSdvwI6FED7dHB913oQGVi_mw
+
+
+{
+  "email": "sribabumandraju@gmail.com",
+  "otp": "399698"
+}
+
+
+
+###
+POST https://server-13t5.onrender.com/api/user/verifyemail
+Content-Type: application/json
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNyaWJhYnVtYW5kcmFqdUBnbWFpbC5jb20iLCJpZCI6IjY3NGMyYzk3YTY3MDkxMDc5MDYyY2UxNCIsImlzQWRtaW4iOnRydWUsImlhdCI6MTczNjQ0NzI1Mn0.RdD6-dMesr8psz5bv8hSdvwI6FED7dHB913oQGVi_mw
+
+
+{
+  "email": "sribabumandraju@gmail.com",
+  "otp": "898571"
+}
 
 
 
