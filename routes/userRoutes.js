@@ -34,7 +34,7 @@ router.get(`/get/count`,adminAuth, userController.getUserCount);
 router.post(`/authWithGoogle`, userController.authWithGoogle);
 router.put("/:id",userAuth, userController.updateUser);
 router.delete("/deleteImage",userAuth, userController.deleteImage);
-router.post(`/forgotPassword`,userAuth, userController.forgotPassword);
+// router.post(`/forgotPassword`,userAuth, userController.forgotPassword);
 router.post(`/forgotPassword/changePassword`,userAuth, userController.changeForgotPassword);
 
 module.exports = router;

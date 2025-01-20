@@ -31,7 +31,7 @@ router.get(`/recentlyViewd`, productController.getRecentlyViewed);
 router.post(`/recentlyViewd`,userAuth, productController.addRecentlyViewed);
 router.post(`/create`, adminAuth,productController.createProduct);
 router.get("/:id",productController.getProductById);
-router.delete("/deleteImage",adminAuth, productController.deleteImage);
+router.delete("/deleteImage", productController.deleteImage); //changed here
 router.delete("/:id",adminAuth, productController.deleteProduct);
 router.put("/:id", adminAuth,productController.updateProduct);
 

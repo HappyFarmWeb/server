@@ -32,7 +32,7 @@ router.post(`/upload`,adminAuth, upload.array("images"), uploadImages);
 router.get(`/`,getBanners);
 router.get(`/:id`,userAuth, getBannerById);
 router.post(`/create`,adminAuth, createBanner);
-router.delete(`/deleteImage`,adminAuth, deleteImage);
+router.delete(`/deleteImage`, deleteImage);   //changed here
 router.delete(`/:id`,adminAuth, deleteBanner);
 router.put(`/:id`,adminAuth,updateBanner);
 
