@@ -24,7 +24,7 @@ router.get(`/get/count`,userAuth, categoryController.getCategoryCount);
 router.get(`/subCat/get/count`,userAuth, categoryController.getSubCategoryCount);
 router.get("/:id",userAuth, categoryController.getCategoryById);
 router.post("/create", adminAuth,categoryController.createCategory);
-router.delete("/deleteImage",adminAuth, categoryController.deleteImage);
+router.delete("/deleteImage",categoryController.deleteImage);
 router.delete("/:id",adminAuth,categoryController.deleteCategory);
 router.put("/:id", adminAuth,categoryController.updateCategory);
 

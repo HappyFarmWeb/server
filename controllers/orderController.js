@@ -1,5 +1,6 @@
 // controllers/ordersController.js
 const { Orders } = require('../models/orders');
+const {Product}=require('../models/products');
 
 exports.getSales = async (req, res) => {
     try {
@@ -59,15 +60,52 @@ exports.getAllOrders = async (req, res) => {
     }
 };
 
+// exports.getOrderById = async (req, res) => {
+//     try {
+//         const order = await Orders.findById(req.params.id);
+
+//         if (!order) {
+//             return res.status(500).json({ message: 'The order with the given ID was not found.' });
+//         }
+//         return res.status(200).send(order);
+//     } catch (error) {
+//         res.status(500).json({ message: 'Server error' });
+//     }
+// };
+
 exports.getOrderById = async (req, res) => {
     try {
         const order = await Orders.findById(req.params.id);
 
         if (!order) {
-            return res.status(500).json({ message: 'The order with the given ID was not found.' });
+            return res.status(404).json({ message: 'The order with the given ID was not found.' });
         }
-        return res.status(200).send(order);
+        console.log(order);
+
+        // Populate product data
+        const populatedProducts = await Promise.all(order.products.map(async (product) => {
+            const productData = await Product.findById(product.productId);
+            if (productData) {
+                return {
+                    ...product._doc, // Existing product data in the order
+                    productTitle: productData.name,
+                    images: productData.images,
+                    price: productData.prices,
+                    orderedPrice:order.amount,
+                };
+            }
+            return product; // Fallback if product is not found
+        }));
+
+        // Attach populated products to the response
+        const orderWithProductData = {
+            ...order._doc,
+            products: populatedProducts,
+        };
+
+        return res.status(200).json(orderWithProductData);
     } catch (error) {
+        console.error('Error fetching order:', error);
         res.status(500).json({ message: 'Server error' });
     }
 };
@@ -129,33 +167,60 @@ exports.deleteOrder = async (req, res) => {
     }
 };
 
+// exports.updateOrder = async (req, res) => {
+//     try {
+//         const order = await Orders.findByIdAndUpdate(
+//             req.params.id,
+//             {
+//                 name: req.body.name,
+//                 phoneNumber: req.body.phoneNumber,
+//                 address: req.body.address,
+//                 pincode: req.body.pincode,
+//                 amount: req.body.amount,
+//                 paymentId: req.body.paymentId,
+//                 email: req.body.email,
+//                 userid: req.body.userid,
+//                 products: req.body.products,
+//                 status: req.body.status
+//             },
+//             { new: true }
+//         );
+
+//         if (!order) {
+//             return res.status(500).json({
+//                 message: 'Order cannot be updated!',
+//                 success: false
+//             });
+//         }
+
+//         res.status(200).send(order);
+//     } catch (error) {
+//         res.status(500).json({ message: 'Server error', error: error.message });
+//     }
+// };
+
 exports.updateOrder = async (req, res) => {
     try {
+        const { status } = req.body;
+
         const order = await Orders.findByIdAndUpdate(
             req.params.id,
-            {
-                name: req.body.name,
-                phoneNumber: req.body.phoneNumber,
-                address: req.body.address,
-                pincode: req.body.pincode,
-                amount: req.body.amount,
-                paymentId: req.body.paymentId,
-                email: req.body.email,
-                userid: req.body.userid,
-                products: req.body.products,
-                status: req.body.status
-            },
-            { new: true }
+            { status }, 
+            { new: true } 
         );
 
         if (!order) {
-            return res.status(500).json({
-                message: 'Order cannot be updated!',
+            return res.status(404).json({
+                message: 'Order not found!',
                 success: false
             });
         }
 
-        res.status(200).send(order);
+        res.status(200).json({
+            message: 'Order status updated successfully',
+            success: true,
+            order
+        });
     } catch (error) {
         res.status(500).json({ message: 'Server error', error: error.message });
     }

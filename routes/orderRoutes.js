@@ -22,7 +22,7 @@ router.get('/sales', adminAuth,getSales);
 router.get('/', getAllOrders);
 
 // Route to get order by ID
-router.get('/:id',adminAuth, getOrderById);
+router.get('/:id', getOrderById);
 
 // Route to get the order count
 router.get('/get/count',adminAuth, getOrderCount);
